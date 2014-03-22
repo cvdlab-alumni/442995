@@ -22,8 +22,6 @@ colonne_ter_livello3D=T(3)(2)(STRUCT([colonna_ter_livello3D,T(3)(2.5)]*3+[T(3)(3
 colonne_quar_livello3D=T([2,3])([1.5,-1])(colonne_ter_livello3D)
 colonne_quar_livello3D=COLOR(col)(MAP([S3,S2,S1])(colonne_quar_livello3D))
 
-
-
 colonna_quin_livello3D=COLOR(col)(T([1,2,3])([4.5,16,4.5])(INSR(PROD)([Q(37),Q(1.5),Q(1.5)])))
 colonne_quin_livello3D=T(3)(3)(STRUCT([colonna_quin_livello3D,T(3)(2.5)]*5+[T(3)(5.5),colonna_quin_livello3D]+[T(3)(3.5),colonna_quin_livello3D]*3))
 colonne_ses_livello3D=T([2,3])([1.5,-1])(colonne_quin_livello3D)
@@ -40,6 +38,7 @@ colonne_nono_livello3D=T(3)(2)(STRUCT([colonna_nono_livello3D,T(3)(2.5)]*5+[T(3)
 colonne_decimo_livello3D=T([2,3])([1.5,-1])(colonne_nono_livello3D)
 colonne_decimo_livello3D=COLOR(col)(T(1)(3)(MAP([S3,S2,S1])(colonne_decimo_livello3D)))
 
+#creo gli oggetti sul tetto
 
 tetto=COLOR(col) (T([1,2,3])([1.5,25,1.5])(INSR(PROD)([Q(43),Q(1),Q(43)])))
 pianale= T([1,2,3])([1.5,25,1.5])(INSR(PROD)([Q(43),Q(1.3),Q(43)]))
@@ -50,12 +49,14 @@ porta=PROD([Q(1),Q(2)])
 edificio_alto_con_porte_uno=T([1,2])([10.5,26.5])(COLOR(col)(DIFFERENCE([edificio_alto_senza_porte,T(1)(2)(porta),T(1)(5)(porta)])))
 edificio_alto_con_porte_due=T([1,2])([25.5,26.5])(COLOR(col)(DIFFERENCE([edificio_alto_senza_porte,T(1)(2)(porta),T(1)(5)(porta)])))
 tetto_edificio=T([1,2])([10,30.5])(COLOR(col)(PROD([Q(24),Q(1)])))
-
 ed=STRUCT([edificio_alto_con_porte_uno,edificio_alto_con_porte_due,tetto_edificio])
 
+#creo i due edifici sul tetto con il rispettivo tetto
 edificio=COLOR(col)(T(3)(12)(PROD([ed,Q(8)])))
 edificio2=COLOR(col)(T(3)(26)(PROD([ed,Q(8)])))
+tetto_edificio3D=T([1,3])([-1,45])(R([3,1])(PI/2)(COLOR(col)(T(3)(26)(PROD([tetto_edificio,Q(9)])))))
+tetto_edificio3D_2=T(1)(-15)(tetto_edificio3D)
 
-costruzione=INSR(STRUCT) ([prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D])
+costruzione=INSR(STRUCT) ([tetto_edificio3D_2, tetto_edificio3D,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D])
 
 VIEW(costruzione)
