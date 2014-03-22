@@ -19,7 +19,7 @@ def creaBaseSupporto (lung):
 supp=creaRampa(50)
 ramp=creaBaseSupporto(50)
 scala= COLOR(GRAY)(T([1,2,3])([-3,-10,7.5])(MAP([S1,S3,S2])(STRUCT([supp,ramp]))))
-supporto=COLOR(GRAY)(T([1,2,3])([7,-10,7.5])(CUBOID([40,10,30])))
+supporto=COLOR(GRAY)(T([1,2,3])([7,-10,7.5])(CUBOID([30.5,10,30])))
 
 ###########################
 
@@ -81,4 +81,3 @@ tetto_edificio3D_2=T(1)(-15)(tetto_edificio3D)
 costruzione=INSR(STRUCT) ([tetto_edificio3D,tetto_edificio3D_2,supporto,scala,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D])
 
 VIEW(costruzione)
-
