@@ -57,6 +57,8 @@ edificio2=COLOR(col)(T(3)(26)(PROD([ed,Q(8)])))
 tetto_edificio3D=T([1,3])([-1,45])(R([3,1])(PI/2)(COLOR(col)(T(3)(26)(PROD([tetto_edificio,Q(9)])))))
 tetto_edificio3D_2=T(1)(-15)(tetto_edificio3D)
 
-costruzione=INSR(STRUCT) ([tetto_edificio3D_2, tetto_edificio3D,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D])
+supporto=COLOR(GRAY)(T([1,2,3])([2,-0.3,7.5])(CUBOID([40,0.3,30])))
+
+costruzione=INSR(STRUCT) ([supporto,tetto_edificio3D_2, tetto_edificio3D,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D])
 
 VIEW(costruzione)
