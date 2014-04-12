@@ -74,7 +74,7 @@ domain2D=PROD([INTERVALS(PI)(32),INTERVALS(1)(3)])
 lampada=PROD([Q(3),MAP(mezzo_disco2D)(domain2D)])
 lampada=COLOR(GRAY)(S([1,2,3])([0.18,0.18,0.18])(lampada))
 
-luce=T([1,2,3])([0.06,-0.15,-0.01])(COLOR(YELLOW)(CUBOID([0.4,0.3,0.001])))
+luce=T([1,2,3])([0.06,-0.15,-0.01])((CUBOID([0.4,0.3,0.001])))
 
 lampada_con_luce=T([1,3])([0.2,3.90])(STRUCT([lampada,luce]))
 
@@ -82,8 +82,12 @@ palo = larRod([0.05,4])([32,1])
 palo=COLOR(GRAY)(STRUCT(MKPOLS(palo)))
 tieni_lampada=COLOR(GRAY)(T([2,3])([-0.03,3.95])(PROD([CUBOID([0.2,0.05]),Q(0.05)])))
 
+luce_emessa = CONE([2,4])(17)
+luce_emessa = MATERIAL([1,1,1,0, 0,0,0,0.3, 0,0,0,0, 0,0,0,0, 30])(luce_emessa)
+luce_emessa = T(1)(0.45)(luce_emessa)
 
-palo_della_luce= STRUCT([palo,tieni_lampada,lampada_con_luce])
+palo_della_luce= STRUCT([palo,tieni_lampada,lampada_con_luce, luce_emessa])
+
 #VIEW(palo_della_luce)
 
 #######################################################################################################################################
