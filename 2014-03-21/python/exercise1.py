@@ -9,7 +9,7 @@ quadrato=T([1,2])([9,0])(COLOR(RED)(PROD([Q(1.5),Q(1.5)])));
 quadrati_orizzontali=STRUCT([quadrato,T(1)(2.5)]*3+[T(1)(12),quadrato]+[T(1)(2.5),quadrato]*2)
 quadrati_verticali=STRUCT([quadrati_orizzontali,T(2)(2.5)]*3+[T(2)(12),quadrati_orizzontali]+[T(2)(2.5),quadrati_orizzontali]*2)
 
-#creo i quadrati bianchi 
+#creo i quadrati bianchi
 quadrato_bianco=T([1,2,3])([10.5,1.5,0.1])(PROD([Q(3.5),Q(3.5)]));
 quadrati_bianchi_orizzontali=STRUCT([quadrato_bianco,T(1)(19.5)]*2)
 quadrati_bianchi_verticali=STRUCT([quadrati_bianchi_orizzontali,T(2)(19.5)]*2)

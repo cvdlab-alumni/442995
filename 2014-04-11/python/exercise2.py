@@ -19,6 +19,45 @@ def creaBaseSupporto (lung,q=30):
 	return supp3d
 
 
+def larRing1(params):
+	r1,r2 =params
+	def larRing0(shape=[36,1]):
+		V,CV =larIntervals (shape)([PI,r2-r1])
+		V=translatePoints(V,[0,r1])
+		domain=V,CV
+		x=lambda V : [p[1] * COS(p[0]) for p in V]
+		y=lambda V : [p[1] * SIN(p[0]) for p in V]
+		return larMap([x,y])(domain)
+	return larRing0
+
+
+def larDisk1(radius=1):
+	def larDisk0(shape=[36,1]):
+		domain=larIntervals(shape)([PI,radius])
+		V,CV=domain
+		x=lambda V : [p[1]*COS(p[0]) for p in V]
+		y=lambda V : [p[1]*SIN(p[0]) for p in V]
+		return larMap([x,y]) (domain)
+	return larDisk0
+	
+#########################################################################################################################################################
+#Creo l'entrata
+
+ring=checkModel(larDisk1(15)([25,1]))
+ring_2=checkModel(larDisk1(12)([25,1]))
+ring_3=checkModel(larDisk1(5)([25,1]))
+ring=STRUCT(MKPOLS(ring))
+ring_2=STRUCT(MKPOLS(ring_2))
+ring_3=STRUCT(MKPOLS(ring_3))
+ring_3D=COLOR(col)(T([1,2])([3,20])(R([1,3])(PI/2)(PROD([ring,Q(4)]))))
+ring_3D_2=T([1,2])([-1.5,20])(R([1,3])(PI/2)(PROD([ring_2,Q(0.1)])))
+ring_3D_3=COLOR(BLACK)(T([1,2])([-2,20])(R([1,3])(PI/2)(PROD([ring_3,Q(0.1)]))))
+colonna_1=COLOR(col)(T(3)(-15)(CUBOID([3,20,3])))
+colonna_2=COLOR(col)(T(3)(12)(CUBOID([3,20,3])))
+entrata=T([1,3])([10.2,95.3])(STRUCT([ring_3D,ring_3D_2,ring_3D_3, colonna_1,colonna_2]))
+
+#VIEW(entrata)
+
 
 ########################################################################################################################################################
 #creo dei giardini sul tetto della costruzione
@@ -84,12 +123,12 @@ tetto=COLOR(col) (T([1,2,3])([1.5,25,1.5])(INSR(PROD)([Q(43),Q(1),Q(43)])))
 pianale= T([1,2,3])([1.5,25,1.5])(INSR(PROD)([Q(43),Q(1.3),Q(43)]))
 prato= COLOR(GRAY)(T([1,2,3])([3,25,3])(INSR(PROD)([Q(40),Q(1.5),Q(40)])))
 
-#edificio sul tetto senza le porte
 edificio_alto_senza_porte=PROD([Q(8),Q(4)])
-edificio_alto_senza_porte_uno=T([1,2])([10.5,26.5])(COLOR(col)(edificio_alto_senza_porte))
-edificio_alto_senza_porte_due=T([1,2])([25.5,26.5])(COLOR(col)(edificio_alto_senza_porte))
+porta=PROD([Q(1),Q(2)])
+edificio_alto_con_porte_uno=T([1,2])([10.5,26.5])(COLOR(col)(DIFFERENCE([edificio_alto_senza_porte,T(1)(2)(porta),T(1)(5)(porta)])))
+edificio_alto_con_porte_due=T([1,2])([25.5,26.5])(COLOR(col)(DIFFERENCE([edificio_alto_senza_porte,T(1)(2)(porta),T(1)(5)(porta)])))
 tetto_edificio=T([1,2])([10,30.5])(COLOR(col)(PROD([Q(24),Q(1)])))
-ed=STRUCT([edificio_alto_senza_porte_uno,edificio_alto_senza_porte_due,tetto_edificio])
+ed=STRUCT([edificio_alto_con_porte_uno,edificio_alto_con_porte_due,tetto_edificio])
 
 #creo i due edifici sul tetto con il rispettivo tetto
 edificio=COLOR(col)(T(3)(12)(PROD([ed,Q(8)])))
@@ -99,10 +138,20 @@ tetto_edificio3D_2=T(1)(-15)(tetto_edificio3D)
 
 
 percorso_tetto=T([1,2,3])([11,32,13.5])(CUBOID([7,0.1,19]))
-percorso_tetto_2=T([1,2])([15,-0.4])(percorso_tetto)
+percorso_tetto_2=T(1)(15)(percorso_tetto)
+
 percorso_tetto_3=T([1,2,3])([11,32,12.6])(CUBOID([22,0.1,7]))
 percorso_tetto_4=T(3)(14)(percorso_tetto_3)
-percorsi_tetto=T(2)(-0.3)(INSR(STRUCT)([percorso_tetto,percorso_tetto_2,percorso_tetto_3,percorso_tetto_4]))
+
+mura_tetto_edificio_1=COLOR(col)(T([1,2,3])([11,32,12.5])(CUBOID([0.3,2,21.1])))
+mura_tetto_edificio_2=COLOR(col)(T([1,2,3])([18,32,12.5])(CUBOID([0.3,2,21.1])))
+mura_tetto_edificio_3=COLOR(col)(T([1,2,3])([26,32,12.5])(CUBOID([0.3,2,21.1])))
+mura_tetto_edificio_4=COLOR(col)(T([1,2,3])([33,32,12.5])(CUBOID([0.3,2,21.1])))
+mura_tetto_edificio_5=COLOR(col)(T([1,2,3])([11,32.1,12.5])(CUBOID([22,2,0.3])))
+mura_tetto_edificio_6=T(3)(7)(mura_tetto_edificio_5)
+mura_tetto_edificio_7=T(3)(7)(mura_tetto_edificio_6)
+mura_tetto_edificio_8=T(3)(7)(mura_tetto_edificio_7)
+mura_tetto_edificio=T(2)(-0.5)(INSR(STRUCT)([ percorso_tetto_4, percorso_tetto_3, percorso_tetto_2, percorso_tetto, mura_tetto_edificio_8, mura_tetto_edificio_7, mura_tetto_edificio_6, mura_tetto_edificio_1,mura_tetto_edificio_2, mura_tetto_edificio_3,mura_tetto_edificio_4, mura_tetto_edificio_5]))
 
 giardino_tetto1=COLOR(green)(T([1,2,3])([11,26.6,3.3])(CUBOID([7,0.1,39.3])))
 giardino_tetto_2=T(1)(15)(giardino_tetto1)
@@ -118,10 +167,12 @@ supp=creaRampa(50,50)
 ramp=creaBaseSupporto(50,50)
 scala= COLOR(GRAY)(T([1,2,3])([-3,-10,-2.5])(MAP([S1,S3,S2])(STRUCT([supp,ramp]))))
 supporto=COLOR(GRAY)(T([1,2,3])([7,-10,-2.5])(CUBOID([30.5,10,50])))
-
+entrata=T([1,2,3])([-60,-10,-73])(entrata)
+base_supp=COLOR(GRAY)(T([1,2,3])([-60,-10,-2.5])(CUBOID([70,0.1,50])))
 
 ####################################################################################################################################################
 
-china_pavillion=T([1,2,3])([150,10,75])(INSR(STRUCT)([ percorsi_tetto,percorso_tetto_2, scala,supporto, giardino_tetto,  tetto_edificio3D,tetto_edificio3D_2,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D]))
+china_pavillion=T([1,2,3])([150,10,75])(INSR(STRUCT)([base_supp,entrata, scala,supporto, giardino_tetto, mura_tetto_edificio, tetto_edificio3D,tetto_edificio3D_2,prato,pianale,edificio,edificio2,tetto,colonne_decimo_livello3D,colonne_nono_livello3D,colonne_ott_livello3D,colonne_sett_livello3D,colonne_ses_livello3D,colonne_quin_livello3D,colonne_quar_livello3D,colonne_ter_livello3D,colonne_sec_livello3D, colonne_primo_livello3D ,finestre_vertic_3D,colonne_vertic_rosse3D]))
+
 
 VIEW(china_pavillion)

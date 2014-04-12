@@ -2,7 +2,7 @@ from pyplasm import *
 
 col=Color4f([(0.78),(0.04),(0.084)])
 
-#######################  ES 4   ###################
+####################### ES 4 ###################
 #SCALA
 
 def creaRampa (lung) :
@@ -22,21 +22,6 @@ scala= COLOR(GRAY)(T([1,2,3])([-3,-10,7.5])(MAP([S1,S3,S2])(STRUCT([supp,ramp]))
 supporto=COLOR(GRAY)(T([1,2,3])([7,-10,7.5])(CUBOID([30.5,10,30])))
 
 ###########################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-####################
 
 colonna_rossa3D=COLOR(col)(INSR(PROD)([Q(1.5),Q(10),Q(1.5)]))
 colonne_orizz_rosse3D=STRUCT([colonna_rossa3D,T(1)(2.5)]*3+[T(1)(12),colonna_rossa3D]+[T(1)(2.5),colonna_rossa3D]*2)
