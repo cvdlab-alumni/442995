@@ -14,7 +14,7 @@ def diagram2cell(diagram,master,cell):
    diagramBoundaryFaces = lar2boundaryFaces(CV,FV)
    """
    mas = mas[0],[c for k,c in enumerate(mas[1]) if k != cell]
-   V, CVa, CVb, ns = vertexSieve(master,diagram)
+   V, CVa, CVb, nab = vertexSieve(master,diagram)
    CV=CVa+CVb
    master=V,CV
    return master
