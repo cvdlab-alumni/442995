@@ -14,6 +14,8 @@ def mergingNumberingEliminationSingleInstance(diagram,master,toRemove,toMerge):
 
 #prende come parametri una lista di diagrammi, un master, una lista di lista di toRemove, una lista di toMerge
 #scrivo nel toRemove i numeri delle celle di diagram che voglio rimuovere una volta inserito il diagram nel master
+#(quindi scrivo i vertici di diagram da enumerare senza preoccuparmi del fatto delle nuove enumerazioni che avverranno
+# una volta inserito diagram in master)
 #la funziona calcola i nuovi numeri di celle e rimuove la cella o le celle desiderate.
 #Questa funziona ripete il procedimento per tutti i diagram inseriti nella lista diagrams
 def mergingNumberingElimination2(diagrams,master,toRemove,toMerge):

@@ -13,9 +13,9 @@ def diagram2cell(diagram,master,cell):
    masterBoundaryFaces = boundaryOfChain(CV,FV)([cell])
    diagramBoundaryFaces = lar2boundaryFaces(CV,FV)
    """
-   V = mas[0] + diagram[0]
-   offset = len(master[0])
-   CV = [c for k,c in enumerate(master[1]) if k != cell] + [
-         [v+offset for v in c] for c in diagram[1]]
-   master = V, CV
+   mas = mas[0],[c for k,c in enumerate(mas[1]) if k != cell]
+   V, CVa, CVb, n12 = vertexSieve(master,diagram)
+   CV=CVa+CVb
+   master=V,CV
    return master
+
