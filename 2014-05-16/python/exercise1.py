@@ -1,7 +1,5 @@
 from larcc import *
 
-red=Color4f([(0.78),(0.04),(0.084)])
-
 
 def creaRampa (lung) :
 	grad2d = MKPOL([[[0,0],[0,1.5],[1.5,1.5]],[[1,2,3]],None])
