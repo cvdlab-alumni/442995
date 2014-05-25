@@ -1,21 +1,31 @@
-def diagram2cell(diagram,master,cell):
 
+from larcc import *
+
+
+
+def diagram2cell(diagram,master,cell):
    mat = diagram2cellMatrix(diagram)(master,cell)
    diagram =larApply(mat)(diagram)  
-   
-   #evito la ripetizione dei vertici
-   mas = filter(lambda fa : len(filter(lambda fb: fa==fb,diagram[0]))==0,master[0])
-   #oppure
-   #diagram[0] = filter(lambda fa : len(filter(lambda fb: fa==fb,master[0]))==0,diagram[0])
-   """
-   # yet to finish coding
+   (V1,CV1),(V2,CV2) = master,diagram
+   n1,n2 = len(V1), len(V2)
+   #verifico i vertici comuni
    V, CV1, CV2, n12 = vertexSieve(master,diagram)
-   masterBoundaryFaces = boundaryOfChain(CV,FV)([cell])
-   diagramBoundaryFaces = lar2boundaryFaces(CV,FV)
-   """
-   mas = mas[0],[c for k,c in enumerate(mas[1]) if k != cell]
-   V, CVa, CVb, nab = vertexSieve(master,diagram)
-   CV=CVa+CVb
-   master=V,CV
+   common = range(n1-n12, n1)
+   rangeN = range(n1,n1-n12+n2)
+   
+   def checkInclusion(V,cell,rangeN):
+      verts = [V[v] for v in cell]
+      minim, maxim = min(verts), max(verts)
+      cell += [v for v in rangeN if (
+         minim[0] <= V[v][0] and minim[1] <= V[v][1] and minim[2] <= V[v][2] 
+         and 
+         V[v][0] <= maxim[0] and V[v][1] <= maxim[1] and V[v][2] <= maxim[2] 
+         )]
+      return cell
+      
+   CV1 = [checkInclusion(V,c,rangeN) 
+         if set(c).intersection(common) != set() else c
+          for c in CV1]
+   CV = [c for k,c in enumerate(CV1) if k != cell] + CV2
+   master = V, CV
    return master
-
