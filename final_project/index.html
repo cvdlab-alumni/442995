@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+  <html>
+   <head> 
+    <title>Appartamento - Michele D'Antimi matr: 442995</title> 
+    <style>
+      body{
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #stats {  /* Align stats top-left */
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+
+        #pointer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+    width: 100px;
+    height: 100px;
+    display: none;
+    background-image: url("assets/textures/general/dot2.gif");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+    </style> 
+    </head>
+    <body>
+    <div id="pointer"></div>
+    <!-- JavaScript libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script src="assets/libs/TrackballControls.js"></script>
+    <script src="assets/libs/ParticleEngine.js"></script>
+    <script src="assets/libs/ParticleEngineExamples.js"></script>
+    <script src="assets/libs/OBJLoader.js"></script>
+    <script src="assets/libs/PointerLockControls2.js"></script>
+    <script type="text/javascript" src="assets/libs/MTLLoader.js"></script> 
+    <script type="text/javascript" src="assets/libs/OBJMTLLoader.js"></script> 
+    <script src="assets/libs/tween.min.js"></script>
+    <script src="assets/scripts/script_salone.js"></script>
+    <script src="assets/scripts/script_cameretta.js"></script>
+    <script src="assets/scripts/script_rifinitureGiardino.js"></script>
+    <script src="assets/scripts/script_texture_app.js"></script>
+    <script src="assets/scripts/script_Finestre.js"></script>
+    <script src="assets/scripts/script_Porte.js"></script>
+    <script src="assets/scripts/script_bagno.js"></script>
+    <script src="assets/scripts/script_salaHobby.js"></script>
+    <script src="assets/scripts/script_cucina.js"></script>
+    <script src="assets/scripts/script_esterno.js"></script>
+    <script src="assets/scripts/script_camera_letto.js"></script>
+    <script src="assets/scripts/script_quadro.js"></script>
+    <script src="assets/scripts/script_particles.js"></script>
+    <script src="assets/scripts/script_luci.js"></script>
+    <script src="assets/scripts/FirstPersonScript.js"></script>
+    <script src="assets/scripts/THREEx.KeyboardState.js"></script>
+    <script src="assets/fonts/gentilis_regular.typeface.js"></script> 
+    <!-- Javascript code that runs our Three.js examples --> 
+    <script>
+      // once everything is loaded, we run our Three.js stuff.
+      $(function () {
+
+        var keyboard = new THREEx.KeyboardState();
+        AbilitaFirstPerson = false;
+        var stats = initStats();
+
+        scene = new THREE.Scene();
+        house = new THREE.Object3D();
+        house.rotation.x=-Math.PI/2;
+        house.position.y=20;
+        scene.add(house);
+
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 3000);
+
+        ray = new THREE.Raycaster();
+        ray.ray.direction.set( 0, -1, 0 );
+
+        trackballControls = new THREE.TrackballControls(camera);
+
+        // create a render and set the size
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(new THREE.Color(0x87CEFA, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        camera.position.set(150,150,80);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        camera.up=new THREE.Vector3(0,1,0);
+
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position.set(-50, 40, 120);
+        spotLight.intensity = .6;
+        house.add(spotLight);
+
+        var spotLight2 = new THREE.DirectionalLight(0xffffff);
+        spotLight2.position.set(120, 40, 120);
+        spotLight2.intensity = .6;
+        house.add(spotLight2);
+
+        var spotLight3 = new THREE.DirectionalLight(0xffffff);
+        spotLight3.position.set(0, -40, 0);
+        spotLight3.intensity = .6;
+        house.add(spotLight3);
+
+        var spotLight4=new THREE.SpotLight( 0xffffff );
+        spotLight4.intensity = 0;
+        house.add(spotLight4);
+      
+        var axisHelper = new THREE.AxisHelper(3);
+        scene.add(axisHelper);
+
+        function createMesh(geom, texture) {
+          var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + texture)
+          texture.wrapS = THREE.RepeatWrapping;
+          texture.wrapT = THREE.RepeatWrapping;
+
+          geom.computeVertexNormals();
+          var mat = new THREE.MeshPhongMaterial();
+          mat.map = texture;
+
+          var mesh = new THREE.Mesh(geom, mat);
+
+          return mesh;
+        }
+
+        function Sound(name) {
+          this.name = name;
+          this.audio = document.createElement('audio');
+          var source = document.createElement('source');
+          source.src = 'assets/sound/' + name + '.mp3';
+          this.audio.appendChild(source);
+        }
+      
+        Sound.prototype.play = function() {
+          this.audio.play();
+        };
+
+        // add the output of the renderer to the html element
+        $('body').append(renderer.domElement);
+
+        objects=[];
+
+        var loader = new THREE.OBJLoader();
+        loader.load('assets/models/appartamento.obj', function (obj) {
+          var material = new THREE.MeshLambertMaterial({color: 0xFFFFFF, shading: THREE.FlatShading});
+          material.side=THREE.DoubleSide;
+          obj.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+              child.material = material;
+            }
+          });
+          house.add(obj);
+          mesh = obj;
+          obj.scale.set(10, 10, 10);
+          // funzione che applica texture a pavimenti e pareti
+          TextApp(obj);
+          house.add(obj);
+        });
+
+        CreaFinestre1(house,objects);
+        CreaFinestre2(house,objects);
+        CreaPorte1(house,objects);
+        CreaPorte2(house,objects);
+
+  // Aggiungo i mobili all'appartamento
+
+        creaDivano(house);
+        lampada(house);
+        Dresser(house);  
+        creaLibreria(house);
+        creaSedia(house);
+        creaTavolo(house);
+        creaLetto(house);
+        creaDesk(house);
+        creaPc(house,objects);
+        creaArmadioRagazzo(house);
+        creaPanchina(house,objects);
+        creaFico(house,objects);
+        creaSpatif(house,objects);
+        creaVasoEst(house,objects);
+        creaLuciEst(house,objects);
+        creaLampioni(house,objects);
+        creaChitarra(house,objects);
+        creaSediaRagazzo(house,objects);
+        creaVasca(house,objects);
+        creaLav(house,objects);
+        creaVanity(house,objects);
+        creaVanity2(house,objects);
+        creaSpecchio(house,objects);
+        creaWater(house,objects);
+        creaCartaIg(house,objects);
+        creaCanestro(house,objects);
+        creaCampo(house);
+        creaPalla(house,objects);
+        creaPingPong(house,objects);
+        creaFreccette(house,objects);
+        creaFreccia(house,objects);
+        creaPortaCD(house,objects);
+        creaFrigo(house);
+        creaLavandinoCucina(house);
+        creaCocomero(house,objects);
+        creaArmadietto(house,objects);
+        creaAlbero(house,objects);
+        creaArmadioLetto(house);
+        creaLettoCameraLetto(house);
+        creaPuff(house);
+        creaComodinoCamLetto(house);
+        creaLibreriaCorrid(house);
+
+        engine=[];
+        engine[0]=null;
+        engine[1]=null;
+        engine=creaDoccia(house,objects,engine);
+        engine=creaFontanaFuoco(house,objects,engine);
+        engine=creaIsola(house,objects,engine);
+        video = document.createElement( 'video' );
+        creaTV(objects,house,video);
+        creaQuadroSalone2(house);
+        creaQuadroSalone3(house); 
+        creaQuadroSalone4(house);  
+        creaQuadroSalone5(house);    
+        creaQuadroSalaHobby1(house);
+        creaQuadroSalaHobby2(house);
+        creaQuadroSalaHobby3(house);      
+        creaQuadroCameretta(house);
+        creaQuadroCameretta2(house);
+        creaQuadroCameraLetto(house); 
+        creaQuadroCucina(house);
+        creaQuadroCucina2(house);
+        creaLampadari(house,objects);
+        creaCampanello(house,objects);
+        creaTappetino(house);
+        creaRacchettaPingPong(house,objects);
+        roof=creaTetto(house,objects);
+        arrLuciEst=[];
+        arrLuciEst=luciEsterneAccese(true,house,arrLuciEst);
+ 
+
+        controllo = new function () {
+            this.FirstPerson = initFirstPerson;
+            this.showAxisHelper = true;
+            this.morning=true;
+            this.clouds=false;
+            this.fireflies=false;
+            this.extern_light=false;
+            this.whit_roof=true;
+            this.enable_mirror=false;
+            this.skyBox=false;
+        };
+
+        creaMuraGiardino(house);
+
+        var gui = new dat.GUI();
+        var axis_control = gui.add(controllo, 'showAxisHelper');
+        axis_control.onChange(function (value) {
+        axisHelper.visible = value;
+        });
+
+        gui.add(controllo, "FirstPerson");
+
+        gui.add(controllo, 'enable_mirror').onChange(function (value) {
+        if(value){
+          var cubeGeom = new THREE.CubeGeometry(6, 9, .15, 1, 1, 1);
+          mirrorCubeCamera = new THREE.CubeCamera( 0.1, 70, 70 );
+          mirrorCubeCamera.rotation.x=0.5*Math.PI;
+          house.add( mirrorCubeCamera );
+          var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+
+          mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
+          mirrorCube.position.set(14,17.9,21);
+          mirrorCubeCamera.position = mirrorCube.position;
+          mirrorCube.rotation.x=0.5*Math.PI;
+          house.add(mirrorCube); 
+         }
+        else{
+
+          house.remove(mirrorCube);
+          house.remove(mirrorCubeCamera);
+         }
+        });
+
+
+        gui.add(controllo, 'extern_light').onChange(function (value) {
+        if(value){
+         for (i=0;i<4;i++)
+              arrLuciEst[i].intensity=2;
+         for (i=4;i<6;i++)
+              arrLuciEst[i].intensity=5;
+         }
+        else{
+         for (i=0;i<6;i++)
+             arrLuciEst[i].intensity=0;
+         }
+        });
+
+        gui.add(controllo, 'morning').onChange(function (value) {
+          if(value){
+          renderer.setClearColor(new THREE.Color(0x87CEFA, 1.0));
+          spotLight.intensity=0.6;
+          spotLight2.intensity=0.6;
+          spotLight3.intensity=0.6;
+            if(engine[0]!==null){
+            engine[0].destroy();}
+            }
+          else{
+            if(controllo.skyBox) scene.remove(skyBox);
+          renderer.setClearColor(new THREE.Color(0x070225, 0.3));
+          spotLight.intensity=0.1;
+          spotLight2.intensity=0.1;
+          spotLight3.intensity=0.1;
+            if(engine[0]!==null){
+            engine[0].destroy();}
+            engine_star = new ParticleEngine();   
+            engine_star.setValues( Particles.starfield );
+            engine_star.initialize();
+            engine[0]=engine_star;
+          }
+        });
+
+        gui.add(controllo, 'clouds').onChange(function (value) {
+        if(!value){
+          if(engine[0]!==null){
+          engine[0].destroy();}
+         }
+        else{
+          if(engine[0]!==null){
+            engine[0].destroy();}
+          engine_cloud = new ParticleEngine();   
+          engine_cloud.setValues( Particles.clouds );
+          engine_cloud.initialize();
+          engine[0]=engine_cloud;
+         }
+        });
+
+        gui.add(controllo, 'whit_roof').onChange(function (value) {
+        if(value)
+          roof.position.z=34;
+        else
+          roof.position.z=-100;
+        });
+
+        gui.add(controllo, 'clouds').onChange(function (value) {
+        if(!value){
+          if(engine[0]!==null){
+            engine[0].destroy();}
+        }
+        else{
+          if(engine[0]!==null){
+            engine[0].destroy();}
+            engine_cloud = new ParticleEngine();   
+            engine_cloud.setValues( Particles.clouds );
+            engine_cloud.initialize();
+            engine[0]=engine_cloud;
+        }
+        });
+
+        gui.add(controllo, 'fireflies').onChange(function (value) {
+        if(!value){
+          if(engine[1]!==null){
+          engine[1].destroy();}
+        }
+        else{
+          if(engine[1]!==null){
+            engine[1].destroy();}
+          engine_star = new ParticleEngine();   
+          engine_star.setValues( Particles.fireflies );
+          engine_star.initialize();
+          engine[1]=engine_star;
+        }
+        });
+
+        gui.add(controllo, 'skyBox').onChange(function (value) {
+          AggiungiSkyBox(value);
+        });
+
+
+        render();
+
+
+        oggetti_inter=[];
+        AggiungiCammino(house,oggetti_inter);
+        Alieni(house,objects,oggetti_inter);
+
+        function render() {
+
+          if (controllo.enable_mirror===true){
+            mirrorCube.visible = false;
+            mirrorCubeCamera.updateCubeMap( renderer, scene );
+            mirrorCube.visible = true;
+          }
+
+          if (AbilitaFirstPerson === true) {
+
+            if ( keyboard.pressed("q") ){
+              cuubo.position.y=4;
+              torcia.rotation.x=0.1*Math.PI;
+            }
+            if ( !keyboard.pressed("q") ){
+              cuubo.position.y=-1;
+              torcia.rotation.x=0;
+            }
+            if ( keyboard.pressed("e") ){
+              cuubo.position.y=-7;
+              torcia.rotation.x=-0.1*Math.PI;
+            }
+            if (keyboard.pressed("r")){
+              spotLight4.intensity=3;
+              spotLight4.angle=Math.PI/6;
+              spotLight4.position.set(0, 0, -2);
+              spotLight4.distance=90;
+              spotLight4.target=cuubo;  
+              controls.getObject().add(spotLight4);
+            }
+            if (keyboard.pressed("t")){
+              spotLight4.intensity=0;
+            }
+            animateFP(oggetti_inter);
+          }
+          stats.update();
+          trackballControls.update();
+          TWEEN.update();
+          requestAnimationFrame(render);
+          renderer.render(scene, camera);
+          if(engine[0]!==null){
+            engine[0].update( 0.01 * 0.5 );}
+          if(engine[1]!==null){
+            engine[1].update( 0.01 * 0.5 );}
+          if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+              videoImageContext.drawImage( video, 0, 0 );
+            if ( videoTexture ) 
+              videoTexture.needsUpdate = true;
+            }
+        }
+
+        function initStats() {
+          var stats = new Stats();
+          stats.setMode(0); // 0: fps, 1: ms
+          $('body').append(stats.domElement);
+          return stats;
+        }
+
+        var projector = new THREE.Projector();
+        document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+        function onDocumentMouseDown(event) {
+
+        if(AbilitaFirstPerson === false){
+          event.preventDefault();
+          var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+          projector.unprojectVector(vector, camera);
+          var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+          var intersects = raycaster.intersectObjects(objects);
+          if (intersects.length > 0) {
+            intersects[ 0 ].object.interact&&intersects[0].object.interact();
+          }
+         }
+        else{
+         event.preventDefault(); 
+         var vector = new THREE.Vector3(0,0, -1); 
+         projector.unprojectVector(vector, camera); 
+         var cameraDirection = controls.getDirection(new THREE.Vector3(0, 0, 0)).clone(); 
+         var raycaster = new THREE.Raycaster(controls.getObject().position,cameraDirection,0,20); 
+         var intersects = raycaster.intersectObjects(objects);
+          if (intersects.length > 0) { 
+            intersects[ 0 ].object.interact&&intersects[0].object.interact();
+           } 
+         }
+        }  
+      });
+    </script>  
+   </body>
+  </html>
