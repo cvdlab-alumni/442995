@@ -386,6 +386,7 @@
         AggiungiCammino(house,oggetti_inter);
         Alieni(house,objects,oggetti_inter);
 
+        window.addEventListener( 'resize', onWindowResize, false );
         function render() {
 
           if (controllo.enable_mirror===true){
@@ -442,6 +443,12 @@
           stats.setMode(0); // 0: fps, 1: ms
           $('body').append(stats.domElement);
           return stats;
+        }
+
+        function onWindowResize() {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize( window.innerWidth, window.innerHeight );
         }
 
         var projector = new THREE.Projector();

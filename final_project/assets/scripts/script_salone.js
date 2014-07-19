@@ -306,7 +306,7 @@ function creaTV(objects,house){
           object.rotation.y = -0.5*Math.PI;
           });
 
-          var cubeGeometry = new THREE.BoxGeometry(1,3,1);
+          var cubeGeometry = new THREE.BoxGeometry(1,3,4);
           var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
           cubeMaterial.transparent=true;
           cubeMaterial.opacity=0;

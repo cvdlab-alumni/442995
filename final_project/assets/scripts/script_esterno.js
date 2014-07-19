@@ -69,25 +69,12 @@ function Alieni(house,objects, oggetti_inter){
     ascens_alieno.position.set(0,-30,8);
     Ufo_vol.add(ascens_alieno);  
 
-/*
-    var dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(-20, -35, -20);
-    dirLight.intensity = .6;
-    dirLight.target=ascens_alieno;
-    Ufo_vol.add(dirLight);*/
-
-      var pointColor = 0xFFFFFF;
-      pointLightUfo = new THREE.PointLight(pointColor);
-      pointLightUfo.position.set(-20,-35,-80);
-      pointLightUfo.distance = 200;
-      pointLightUfo.intensity=1;
-      Ufo_vol.add(pointLightUfo);
-
-    //var directionalLightHelper = new THREE.DirectionalLightHelper(dirLight,15); // il secondo parametro è la grandezza del piano di luce
-    //Ufo_vol.add(directionalLightHelper);
-
-
-
+    var pointColor = 0xFFFFFF;
+    pointLightUfo = new THREE.PointLight(pointColor);
+    pointLightUfo.position.set(-20,-35,-80);
+    pointLightUfo.distance = 200;
+    pointLightUfo.intensity=1;
+    Ufo_vol.add(pointLightUfo);
 
     base_volante.interact=function(){
 
@@ -131,7 +118,6 @@ function Alieni(house,objects, oggetti_inter){
         .to({ x: 0, y: 150, z: 150}, 30000)
         .start();
 
-//10,180,180
       var Volare2 = new TWEEN.Tween(controls.getObject().position)
         .to({ x: 0, y: 193, z: -115}, 50000);
 
@@ -438,7 +424,15 @@ function creaFontanaFuoco(house,objects,oggetto){
       cylinder.position.set(115,  70, -7);
       house.add(cylinder);
 
-      cylinder.interact=function(){
+      var cubeGeometry = new THREE.BoxGeometry(4,4,2.8);
+      var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+      cubeMaterial.transparent=true;
+      cubeMaterial.opacity=0;
+      var glass_font = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      house.add(glass_font);
+      glass_font.position.set(115,  70, -7);
+
+      glass_font.interact=function(){
 
       sound=new Sound('fontana');
       sound.audio.play();
@@ -480,7 +474,7 @@ function creaFontanaFuoco(house,objects,oggetto){
 
       }
 
-    objects.push(cylinder);
+    objects.push(glass_font);
 
     return oggetto;
 }
