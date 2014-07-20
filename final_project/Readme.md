@@ -15,7 +15,7 @@ Project organization :
 Graphic Techniques:
 ==================
 * bump map, repeat wrapping -> frame and walls.
-* Video Texture -> HD tv
+* **Video Texture** -> HD tv
 * texture -> walls,floors,objects.
 * tween animation -> PingPong ball and racket, Basket ball, chair rotation, opening/closing shower door, Ufo movement and first person fly, opening/closing doors and windows, darts movement, water animation, knife and watermelon animation, bell animation.
 * import obj, obj/mtl.
@@ -23,9 +23,9 @@ Graphic Techniques:
 * **TrackballControls, PointerLockControls, picking object.**
 * **particle** -> star in the night, clouds, water in the shower, flames, fountain near the basket camp, fireflies.
 * **Audio** -> tv,guitar,light on/off ,bell,chair rotation,fountain, flames, open/close water, open/close window and door, UFO, scary sound in the bathroom (only in the night), open/close shower door, PC.
-* Cube Camera -> Mirror in the bathroom.
+* **Cube Camera** -> Mirror in the bathroom.
 * Text Geometry -> cvdlab mat.
-* Keyboard state -> animation of the torch carried by the player (only in the night with First Person control).
+* **Keyboard state** -> animation of the torch carried by the player (only in the night with First Person control).
 * Shape -> wall and roof.
 * Gui ->  set night and day, Skybox, extern light, particle, change camera controls.
 * PointLight, SpotLight, DirectionalLight.
