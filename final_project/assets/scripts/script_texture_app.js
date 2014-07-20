@@ -119,7 +119,7 @@
 	      muro_rag2.position.set(7.21,6.7,1.67);
 	      obj.add(muro_rag2);
 
-	      var muro_rag3 = createMesh(new THREE.PlaneGeometry(2.5,2.5), "anime5.jpg");
+	      muro_rag3 = createMesh(new THREE.PlaneGeometry(2.5,2.5), "anime5.jpg");
 	      muro_rag3.material.side=THREE.DoubleSide;
 	      muro_rag3.rotation.x=0.5*Math.PI;
 	      muro_rag3.rotation.y=0.5*Math.PI;
@@ -519,5 +519,29 @@
 	      muro_bagnet7.rotation.x=0.5*Math.PI;
 	      muro_bagnet7.position.set(1.81,0.3091,2.3);
 	      obj.add(muro_bagnet7);
+
+	}
+
+
+
+
+	function textNight(house){
+
+    var foot= createMesh(new THREE.PlaneGeometry(1.5,3), "foot.png");
+	     foot.material.side=THREE.DoubleSide;
+         foot.material.transparent=true;
+         foot.material.opacity=.99;
+	     foot.position.set(40,44,3.4);
+	     house.add(foot);
+
+	     var foot2= createMesh(new THREE.PlaneGeometry(1.5,3), "foot.png");
+	     foot2.material.side=THREE.DoubleSide;
+         foot2.material.transparent=true;
+         foot2.material.opacity=.99;
+         foot2.rotation.z=-0.2*Math.PI;
+	     foot2.position.set(37,47.5,3.4);
+	     house.add(foot2);
+
+		muro_rag3.material.map=THREE.ImageUtils.loadTexture("assets/textures/general/alessa.jpg");
 
 	}

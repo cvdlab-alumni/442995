@@ -11,7 +11,12 @@ if (havePointerLock) {
       camera.position.set(0,0,0);
       camera.up = new THREE.Vector3(0, 1, 0);
       controls.getObject().position.set(20, 30, 50);
+      if(controllo.morning)
+      $("#point").fadeIn(1000);
+      else{
       $("#pointer").fadeIn(1000);
+      textNight(house);
+      }        
     } else {
       location.reload();
     }
